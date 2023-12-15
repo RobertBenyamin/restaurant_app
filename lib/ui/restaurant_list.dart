@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:restaurant_app/data/model/restaurant.dart';
+import 'package:restaurant_app/ui/restaurant_detail.dart';
 
 class RestaurantListPage extends StatefulWidget {
   const RestaurantListPage({Key? key}) : super(key: key);
@@ -34,7 +35,9 @@ class RestaurantListPageState extends State<RestaurantListPage> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double maxSizedBoxHeight = screenHeight - AppBar().preferredSize.height - MediaQuery.of(context).padding.top;
+    double maxSizedBoxHeight = screenHeight -
+        AppBar().preferredSize.height -
+        MediaQuery.of(context).padding.top;
 
     return Scaffold(
       appBar: AppBar(
@@ -56,6 +59,7 @@ class RestaurantListPageState extends State<RestaurantListPage> {
                         elevation: 2,
                         color: Colors.white,
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                               flex: 1,
@@ -73,45 +77,61 @@ class RestaurantListPageState extends State<RestaurantListPage> {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 8),
                             Expanded(
                               flex: 2,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    restaurant.name,
-                                    style: const TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 12.0,
+                                  bottom: 12.0,
+                                  right: 12.0,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      restaurant.name,
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.location_on,
-                                        color: Colors.red,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(restaurant.city),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.star,
-                                        color: Colors.yellow,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(restaurant.rating.toString()),
-                                    ],
-                                  )
-                                ],
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.location_on_outlined,
+                                          color: Colors.red,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(restaurant.city),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.star_border_outlined,
+                                          color: Colors.yellow,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(restaurant.rating.toString()),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             )
                           ],
                         ),
                       ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RestaurantDetailPage(
+                              restaurant: restaurant,
+                            ),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
