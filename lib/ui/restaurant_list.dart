@@ -12,10 +12,13 @@ class RestaurantListPage extends StatefulWidget {
 
 class RestaurantListPageState extends State<RestaurantListPage> {
   List<RestaurantElement> _restaurants = [];
+  List<RestaurantElement> _filteredRestaurants = [];
+  late TextEditingController _searchController;
 
   @override
   void initState() {
     super.initState();
+    _searchController = TextEditingController();
     _loadRestaurantData();
   }
 
@@ -26,10 +29,21 @@ class RestaurantListPageState extends State<RestaurantListPage> {
       Restaurant restaurants = restaurantFromJson(jsonString);
       setState(() {
         _restaurants = restaurants.restaurants;
+        _filteredRestaurants = _restaurants;
       });
     } catch (e) {
       debugPrint('Failed to load restaurant data: $e');
     }
+  }
+
+  void _searchRestaurants(String query) {
+    List<RestaurantElement> filteredList = _restaurants
+        .where((restaurant) =>
+            restaurant.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+    setState(() {
+      _filteredRestaurants = filteredList;
+    });
   }
 
   @override
@@ -49,11 +63,32 @@ class RestaurantListPageState extends State<RestaurantListPage> {
           child: Column(
             children: [
               SizedBox(
+                height: 40.0,
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    labelText: 'Search',
+                    labelStyle: const TextStyle(
+                      color: Color(0xFF37465D),
+                    ),
+                    filled: true,
+                    fillColor: const Color(0xFF000000).withOpacity(0.07),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24.0),
+                    ),
+                  ),
+                  onChanged: (String? value) {
+                    _searchRestaurants(value!);
+                  },
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              SizedBox(
                 height: maxSizedBoxHeight,
                 child: ListView.builder(
-                  itemCount: _restaurants.length,
+                  itemCount: _filteredRestaurants.length,
                   itemBuilder: (context, index) {
-                    RestaurantElement restaurant = _restaurants[index];
+                    RestaurantElement restaurant = _filteredRestaurants[index];
                     return InkWell(
                       child: Card(
                         elevation: 2,
