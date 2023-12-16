@@ -95,9 +95,15 @@ class RestaurantDetailPage extends StatelessWidget {
                         itemBuilder: (context, index) {
                           Drink food = restaurant.menus.foods[index];
                           return Card(
+                            color: const Color(0xFF4DC7BF),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(food.name),
+                              child: Text(
+                                food.name,
+                                style: const TextStyle(
+                                  color: Color(0xFF37465D),
+                                ),
+                              ),
                             ),
                           );
                         }
@@ -120,9 +126,15 @@ class RestaurantDetailPage extends StatelessWidget {
                         itemBuilder: (context, index) {
                           Drink food = restaurant.menus.drinks[index];
                           return Card(
+                            color: const Color(0xFF4CB9E7),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(food.name),
+                              child: Text(
+                                food.name,
+                                style: const TextStyle(
+                                  color: Color(0xFF3B375D),
+                                ),
+                              ),
                             ),
                           );
                         }

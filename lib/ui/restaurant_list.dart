@@ -56,6 +56,7 @@ class RestaurantListPageState extends State<RestaurantListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Restaurant App'),
+        backgroundColor: const Color(0xFFF5F2ED),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -92,7 +93,7 @@ class RestaurantListPageState extends State<RestaurantListPage> {
                     return InkWell(
                       child: Card(
                         elevation: 2,
-                        color: Colors.white,
+                        color: const Color(0xFFF5F2ED),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
