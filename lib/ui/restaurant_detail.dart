@@ -18,9 +18,12 @@ class RestaurantDetailPage extends StatelessWidget {
                   bottomLeft: Radius.circular(16.0),
                   bottomRight: Radius.circular(16.0),
                 ),
-                child: Image.network(
-                  restaurant.pictureId,
-                  fit: BoxFit.cover,
+                child: Hero(
+                  tag: restaurant.id,
+                  child: Image.network(
+                    restaurant.pictureId,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Padding(

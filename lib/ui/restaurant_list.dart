@@ -105,9 +105,12 @@ class RestaurantListPageState extends State<RestaurantListPage> {
                                   height: 100,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8),
-                                    child: Image.network(
-                                      restaurant.pictureId,
-                                      fit: BoxFit.cover,
+                                    child: Hero(
+                                      tag: restaurant.id,
+                                      child: Image.network(
+                                        restaurant.pictureId,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                 ),
