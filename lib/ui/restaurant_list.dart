@@ -14,6 +14,7 @@ class RestaurantListPageState extends State<RestaurantListPage> {
   List<RestaurantElement> _restaurants = [];
   List<RestaurantElement> _filteredRestaurants = [];
   late TextEditingController _searchController;
+  bool isError = false;
 
   @override
   void initState() {
@@ -32,7 +33,9 @@ class RestaurantListPageState extends State<RestaurantListPage> {
         _filteredRestaurants = _restaurants;
       });
     } catch (e) {
-      debugPrint('Failed to load restaurant data: $e');
+      setState(() {
+        isError = true;
+      });
     }
   }
 
@@ -53,6 +56,14 @@ class RestaurantListPageState extends State<RestaurantListPage> {
         AppBar().preferredSize.height -
         MediaQuery.of(context).padding.top;
 
+    if (isError) {
+      return errorPage();
+    }
+
+    return restaurantList(maxSizedBoxHeight);
+  }
+
+  Scaffold restaurantList(double maxSizedBoxHeight) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Restaurant App'),
@@ -176,6 +187,25 @@ class RestaurantListPageState extends State<RestaurantListPage> {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Scaffold errorPage() {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Restaurant App'),
+        backgroundColor: const Color(0xFFF5F2ED),
+      ),
+      body: const Center(
+        child: Text(
+          'Failed to load restaurant data',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 18,
+            color: Color(0xFFFC726F),
           ),
         ),
       ),
