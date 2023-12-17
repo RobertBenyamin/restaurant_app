@@ -97,94 +97,105 @@ class RestaurantListPageState extends State<RestaurantListPage> {
               const SizedBox(height: 8.0),
               SizedBox(
                 height: maxSizedBoxHeight,
-                child: ListView.builder(
-                  itemCount: _filteredRestaurants.length,
-                  itemBuilder: (context, index) {
-                    RestaurantElement restaurant = _filteredRestaurants[index];
-                    return InkWell(
-                      child: Card(
-                        elevation: 2,
-                        color: const Color(0xFFF5F2ED),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: SizedBox(
-                                  height: 100,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Hero(
-                                      tag: restaurant.id,
-                                      child: Image.network(
-                                        restaurant.pictureId,
-                                        fit: BoxFit.cover,
+                child: _filteredRestaurants.isEmpty
+                    ? const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Restaurant Not Found!',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Color(0xFFFC726F),
+                        ),
+                      ),
+                    )
+                    : ListView.builder(
+                        itemCount: _filteredRestaurants.length,
+                        itemBuilder: (context, index) {
+                          RestaurantElement restaurant = _filteredRestaurants[index];
+                          return InkWell(
+                            child: Card(
+                              elevation: 2,
+                              color: const Color(0xFFF5F2ED),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: SizedBox(
+                                        height: 100,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: Hero(
+                                            tag: restaurant.id,
+                                            child: Image.network(
+                                              restaurant.pictureId,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 12.0,
-                                  bottom: 12.0,
-                                  right: 12.0,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      restaurant.name,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
+                                  Expanded(
+                                    flex: 2,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 12.0,
+                                        bottom: 12.0,
+                                        right: 12.0,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            restaurant.name,
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Icon(
+                                                Icons.location_on_outlined,
+                                                color: Colors.red,
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Text(restaurant.city),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Icon(
+                                                Icons.star_border_outlined,
+                                                color: Colors.yellow,
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Text(restaurant.rating.toString()),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.location_on_outlined,
-                                          color: Colors.red,
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(restaurant.city),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.star_border_outlined,
-                                          color: Colors.yellow,
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(restaurant.rating.toString()),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                  )
+                                ],
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RestaurantDetailPage(
-                              restaurant: restaurant,
                             ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RestaurantDetailPage(
+                                    restaurant: restaurant,
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
               ),
             ],
           ),
