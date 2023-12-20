@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:restaurant_app/ui/restaurant_detail.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
 import 'package:restaurant_app/data/model/list_restaurant.dart';
+import 'package:restaurant_app/provider/restaurant_detail_provider.dart';
 
 class CardRestaurant extends StatelessWidget {
   const CardRestaurant({
@@ -91,14 +93,16 @@ class CardRestaurant extends StatelessWidget {
         ),
       ),
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => RestaurantDetailPage(
-        //       restaurant: restaurant,
-        //     ),
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider(
+              create: (_) => RestaurantDetailProvider(
+                  apiService: ApiServices(), id: restaurant.id),
+              child: const RestaurantDetailPage(),
+            ),
+          ),
+        );
       },
     );
   }
