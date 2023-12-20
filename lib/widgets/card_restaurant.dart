@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/data/model/restaurant.dart';
 import 'package:restaurant_app/ui/restaurant_detail.dart';
+import 'package:restaurant_app/data/api/api_services.dart';
+import 'package:restaurant_app/data/model/list_restaurant.dart';
 
 class CardRestaurant extends StatelessWidget {
   const CardRestaurant({
@@ -8,7 +9,7 @@ class CardRestaurant extends StatelessWidget {
     required this.restaurant,
   });
 
-  final RestaurantElement restaurant;
+  final Restaurant restaurant;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +31,14 @@ class CardRestaurant extends StatelessWidget {
                     child: Hero(
                       tag: restaurant.id,
                       child: Image.network(
-                        restaurant.pictureId,
+                        ApiServices.imageUrl + restaurant.pictureId,
                         fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -84,14 +91,14 @@ class CardRestaurant extends StatelessWidget {
         ),
       ),
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => RestaurantDetailPage(
-              restaurant: restaurant,
-            ),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => RestaurantDetailPage(
+        //       restaurant: restaurant,
+        //     ),
+        //   ),
+        // );
       },
     );
   }
