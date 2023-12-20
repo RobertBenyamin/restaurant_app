@@ -28,7 +28,7 @@ class ApiServices {
     }
   }
 
-  Future<RestaurantSearch> searchRestaurant(query) async {
+  Future<RestaurantSearch> getRestaurantSearch(query) async {
     final response = await http.get(Uri.parse('${_baseUrl}search?q=$query'));
     if (response.statusCode == 200) {
       return RestaurantSearch.fromJson(json.decode(response.body));
