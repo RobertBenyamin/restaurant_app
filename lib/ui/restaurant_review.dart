@@ -34,81 +34,84 @@ class _ReviewPageState extends State<ReviewPage> {
         backgroundColor: const Color(0xFFF5F2ED),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              TextField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Name',
-                ),
-              ),
-              const SizedBox(height: 10.0),
-              TextField(
-                controller: _reviewController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Review',
-                  alignLabelWithHint: true,
-                ),
-                maxLines: 6,
-              ),
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    final url = Uri.parse('${ApiServices.baseUrl}review');
-                    final body = json.encode({
-                      'id': widget.id,
-                      'name': _nameController.text,
-                      'review': _reviewController.text,
-                    });
-
-                    var response = await http.post(url,
-                        headers: {"Content-Type": "application/json"},
-                        body: body);
-
-                    if (response.statusCode == 201) {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              ChangeNotifierProvider(
-                            create: (_) => RestaurantListProvider(
-                                apiService: ApiServices()),
-                            child: const RestaurantListPage(),
-                          ),
-                        ),
-                        (route) => false,
-                      );
-                    } else {
-                      throw Exception(response.body);
-                    }
-                  } catch (e) {
-                    if (e is SocketException) {
-                      _message = 'No Internet Connection';
-                    } else {
-                      _message = 'Failed to post review';
-                    }
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF37465D),
-                ),
-                child: const Text('Submit', style: TextStyle(color: Colors.white)),
-              ),
-              const SizedBox(height: 16.0),
-              if (_message.isNotEmpty)
-                Text(
-                  _message,
-                  style: const TextStyle(
-                    color: Colors.red,
-                    fontSize: 18,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Name',
                   ),
                 ),
-            ],
+                const SizedBox(height: 10.0),
+                TextField(
+                  controller: _reviewController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Review',
+                    alignLabelWithHint: true,
+                  ),
+                  maxLines: 6,
+                ),
+                const SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      final url = Uri.parse('${ApiServices.baseUrl}review');
+                      final body = json.encode({
+                        'id': widget.id,
+                        'name': _nameController.text,
+                        'review': _reviewController.text,
+                      });
+
+                      var response = await http.post(url,
+                          headers: {"Content-Type": "application/json"},
+                          body: body);
+
+                      if (response.statusCode == 201) {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                ChangeNotifierProvider(
+                              create: (_) => RestaurantListProvider(
+                                  apiService: ApiServices()),
+                              child: const RestaurantListPage(),
+                            ),
+                          ),
+                          (route) => false,
+                        );
+                      } else {
+                        throw Exception(response.body);
+                      }
+                    } catch (e) {
+                      if (e is SocketException) {
+                        _message = 'No Internet Connection';
+                      } else {
+                        _message = 'Failed to post review';
+                      }
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF37465D),
+                  ),
+                  child: const Text('Submit',
+                      style: TextStyle(color: Colors.white)),
+                ),
+                const SizedBox(height: 16.0),
+                if (_message.isNotEmpty)
+                  Text(
+                    _message,
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 18,
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
