@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/ui/restaurant_search.dart';
+import 'package:restaurant_app/widgets/search_field.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
+import 'package:restaurant_app/data/model/restaurant.dart';
 import 'package:restaurant_app/widgets/card_restaurant.dart';
 import 'package:restaurant_app/provider/restaurant_list_provider.dart'
     as restaurant_list_provider;
 import 'package:restaurant_app/provider/restaurant_search_provider.dart'
     as restaurant_search_provider;
 
-import '../data/model/restaurant.dart';
 
 class RestaurantListPage extends StatefulWidget {
   const RestaurantListPage({Key? key}) : super(key: key);
@@ -41,27 +42,11 @@ class _RestaurantListPageState extends State<RestaurantListPage> {
             children: [
               Row(
                 children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 40.0,
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          labelText: 'Search',
-                          labelStyle: const TextStyle(
-                            color: Color(0xFF37465D),
-                          ),
-                          filled: true,
-                          fillColor: const Color(0xFF000000).withOpacity(0.07),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(24.0),
-                          ),
-                        ),
-                        onChanged: (String? value) {
-                          _searchText = value!;
-                        },
-                      ),
-                    ),
+                  SearchField(
+                    searchController: _searchController,
+                    searchQuery: (value) {
+                      _searchText = value;
+                    },
                   ),
                   const SizedBox(width: 8.0),
                   ElevatedButton(
