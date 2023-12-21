@@ -69,6 +69,10 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Restaurant App'),
+        backgroundColor: const Color(0xFFF5F2ED),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
