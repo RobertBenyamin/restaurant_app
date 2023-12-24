@@ -10,7 +10,6 @@ import 'package:restaurant_app/provider/restaurant_list_provider.dart'
 import 'package:restaurant_app/provider/restaurant_search_provider.dart'
     as restaurant_search_provider;
 
-
 class RestaurantListPage extends StatefulWidget {
   const RestaurantListPage({Key? key}) : super(key: key);
 
@@ -140,5 +139,11 @@ class _RestaurantListPageState extends State<RestaurantListPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }

@@ -23,8 +23,15 @@ class ReviewPage extends StatefulWidget {
 class _ReviewPageState extends State<ReviewPage> {
   String _message = '';
   bool isError = false;
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _reviewController = TextEditingController();
+  late final TextEditingController _nameController;
+  late final TextEditingController _reviewController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController();
+    _reviewController = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,5 +123,12 @@ class _ReviewPageState extends State<ReviewPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _reviewController.dispose();
+    super.dispose();
   }
 }
