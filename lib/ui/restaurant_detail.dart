@@ -3,6 +3,7 @@ import 'restaurant_review.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:restaurant_app/data/model/detail_restaurant.dart';
 import 'package:restaurant_app/provider/restaurant_detail_provider.dart' as rdp;
 
@@ -66,7 +67,38 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   bool showAllReviews = false;
-  bool isFavorite = false;
+  late bool isFavorite;
+
+  Future<bool> _getFavorite() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(widget.restaurant.id) ?? false;
+  }
+
+  void _updateFavorite() async {
+    final prefs = await SharedPreferences.getInstance();
+    isFavorite = await _getFavorite();
+    setState(() {
+      isFavorite = !isFavorite;
+    });
+    prefs.setBool(widget.restaurant.id, isFavorite);
+  }
+
+  FutureBuilder<bool> iconFavorite() {
+    return FutureBuilder<bool>(
+      future: _getFavorite(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          isFavorite = snapshot.data!;
+          return Icon(
+            isFavorite ? Icons.favorite : Icons.favorite_border,
+            color: Colors.red,
+          );
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,15 +110,8 @@ class _DetailPageState extends State<DetailPage> {
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
             child: IconButton(
-              icon: Icon(
-                isFavorite ? Icons.favorite : Icons.favorite_border,
-                color: Colors.red,
-              ),
-              onPressed: () {
-                setState(() {
-                  isFavorite = !isFavorite;
-                });
-              },
+              icon: iconFavorite(),
+              onPressed: _updateFavorite,
             ),
           ),
         ],
