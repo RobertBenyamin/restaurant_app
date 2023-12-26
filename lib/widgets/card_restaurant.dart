@@ -79,7 +79,7 @@ class CardRestaurant extends StatelessWidget {
                       children: [
                         const Icon(
                           Icons.star_border_outlined,
-                          color: Colors.yellow,
+                          color: Colors.orange,
                         ),
                         const SizedBox(width: 8),
                         Text(restaurant.rating.toString()),
