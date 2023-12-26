@@ -1,11 +1,11 @@
 import '../widgets/card_review.dart';
-import 'restaurant_review.dart';
+import 'review.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:restaurant_app/data/model/detail_restaurant.dart';
-import 'package:restaurant_app/provider/restaurant_detail_provider.dart' as rdp;
+import 'package:restaurant_app/provider/detail_provider.dart' as rdp;
 
 class RestaurantDetailPage extends StatelessWidget {
   const RestaurantDetailPage({super.key});

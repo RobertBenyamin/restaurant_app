@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/data/model/restaurant.dart';
 import 'package:restaurant_app/widgets/card_restaurant.dart';
-import 'package:restaurant_app/provider/restaurant_search_provider.dart';
+import 'package:restaurant_app/provider/search_provider.dart';
 
 class RestaurantSearchPage extends StatelessWidget {
   const RestaurantSearchPage({Key? key}) : super(key: key);
