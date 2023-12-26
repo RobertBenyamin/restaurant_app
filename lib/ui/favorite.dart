@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/data/model/restaurant.dart';
@@ -14,14 +15,16 @@ class RestaurantFavoritePage extends StatefulWidget {
 
 class _RestaurantFavoritePageState extends State<RestaurantFavoritePage> {
   late List<Restaurant> _restaurants;
+  final user = FirebaseAuth.instance.currentUser;
 
   Future<List<Restaurant>> _filterFavoriteRestaurant(
       List<Restaurant> restaurants) async {
     List<Restaurant> filteredRestaurant = [];
     final prefs = await SharedPreferences.getInstance();
     for (var restaurant in restaurants) {
-      if (prefs.getBool(restaurant.id) != null &&
-          prefs.getBool(restaurant.id) == true) {
+      String prefsKey = '${user?.email}_${restaurant.id}';
+      if (prefs.getBool(prefsKey) != null &&
+          prefs.getBool(prefsKey) == true) {
         filteredRestaurant.add(restaurant);
       }
     }

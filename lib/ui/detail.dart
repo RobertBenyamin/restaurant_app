@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../widgets/card_review.dart';
 import 'review.dart';
 import 'package:flutter/material.dart';
@@ -68,10 +70,18 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   bool showAllReviews = false;
   late bool isFavorite;
+  final user = FirebaseAuth.instance.currentUser;
+  String prefsKey = '';
+
+  @override
+  void initState() {
+    super.initState();
+    prefsKey = '${user?.email}_${widget.restaurant.id}';
+  }
 
   Future<bool> _getFavorite() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(widget.restaurant.id) ?? false;
+    return prefs.getBool(prefsKey) ?? false;
   }
 
   void _updateFavorite() async {
@@ -80,7 +90,7 @@ class _DetailPageState extends State<DetailPage> {
     setState(() {
       isFavorite = !isFavorite;
     });
-    prefs.setBool(widget.restaurant.id, isFavorite);
+    prefs.setBool(prefsKey, isFavorite);
   }
 
   FutureBuilder<bool> iconFavorite() {
