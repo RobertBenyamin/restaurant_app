@@ -66,6 +66,7 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   bool showAllReviews = false;
+  bool isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +74,22 @@ class _DetailPageState extends State<DetailPage> {
       appBar: AppBar(
         title: const Text('Restaurant App'),
         backgroundColor: const Color(0xFFF5F2ED),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: IconButton(
+              icon: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: Colors.red,
+              ),
+              onPressed: () {
+                setState(() {
+                  isFavorite = !isFavorite;
+                });
+              },
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
