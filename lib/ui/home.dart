@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_app/ui/list.dart';
 import 'package:restaurant_app/ui/favorite.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:restaurant_app/ui/profile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   final screens = [
     const RestaurantListPage(),
     const RestaurantFavoritePage(),
-    const Center(child: Text('Profile')),
+    const ProfilePage(),
   ];
 
   @override
