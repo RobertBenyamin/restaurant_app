@@ -13,6 +13,8 @@ class RestaurantFavoritePage extends StatefulWidget {
 }
 
 class _RestaurantFavoritePageState extends State<RestaurantFavoritePage> {
+  late List<Restaurant> _restaurants;
+
   Future<List<Restaurant>> _filterFavoriteRestaurant(
       List<Restaurant> restaurants) async {
     List<Restaurant> filteredRestaurant = [];
@@ -23,7 +25,10 @@ class _RestaurantFavoritePageState extends State<RestaurantFavoritePage> {
         filteredRestaurant.add(restaurant);
       }
     }
-    return filteredRestaurant;
+    setState(() {
+      _restaurants = filteredRestaurant;
+    });
+    return _restaurants;
   }
 
   @override
