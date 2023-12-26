@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:restaurant_app/ui/list.dart';
+import 'package:restaurant_app/ui/home.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
 import 'package:restaurant_app/provider/list_provider.dart';
 
@@ -86,7 +86,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                 ChangeNotifierProvider(
                               create: (_) => RestaurantListProvider(
                                   apiService: ApiServices()),
-                              child: const RestaurantListPage(),
+                              child: const HomePage(),
                             ),
                           ),
                           (route) => false,
