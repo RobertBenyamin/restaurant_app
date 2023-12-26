@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
 import 'package:restaurant_app/provider/list_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:restaurant_app/ui/main_page.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -29,10 +30,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFF5F2ED),
         fontFamily: GoogleFonts.inknutAntiqua().fontFamily,
       ),
-      home: ChangeNotifierProvider(
-        create: (_) => RestaurantListProvider(apiService: ApiServices()),
-        child: const HomePage(),
-      ),
+      home: const MainPage(),
     );
   }
 }
