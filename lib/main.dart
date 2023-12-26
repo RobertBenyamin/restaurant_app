@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:restaurant_app/ui/home.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:restaurant_app/data/api/api_services.dart';
+import 'package:restaurant_app/provider/list_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +23,10 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFF5F2ED),
         fontFamily: GoogleFonts.inknutAntiqua().fontFamily,
       ),
-      home: const HomePage()
+      home: ChangeNotifierProvider(
+        create: (_) => RestaurantListProvider(apiService: ApiServices()),
+        child: const HomePage(),
+      ),
     );
   }
 }

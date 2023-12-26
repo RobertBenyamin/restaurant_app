@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:provider/provider.dart';
-import 'package:restaurant_app/data/api/api_services.dart';
-import 'package:restaurant_app/provider/list_provider.dart';
 import 'package:restaurant_app/ui/list.dart';
+import 'package:restaurant_app/ui/favorite.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,11 +14,8 @@ class _HomePageState extends State<HomePage> {
   int index = 0;
 
   final screens = [
-    ChangeNotifierProvider(
-      create: (_) => RestaurantListProvider(apiService: ApiServices()),
-      child: const RestaurantListPage(),
-    ),
-    const Center(child: Text('Favorite')),
+    const RestaurantListPage(),
+    const RestaurantFavoritePage(),
     const Center(child: Text('Profile')),
   ];
 
