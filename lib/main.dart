@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:restaurant_app/ui/main_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:restaurant_app/data/api/api_services.dart';
+import 'package:restaurant_app/provider/list_provider.dart';
+import 'package:restaurant_app/ui/home.dart';
+import 'package:restaurant_app/ui/auth/login.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -27,6 +32,29 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.inknutAntiqua().fontFamily,
       ),
       home: const MainPage(),
+    );
+  }
+}
+
+class MainPage extends StatelessWidget {
+  const MainPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ChangeNotifierProvider(
+              create: (_) => RestaurantListProvider(apiService: ApiServices()),
+              child: const HomePage(),
+            );
+          } else {
+            return const LoginPage();
+          }
+        },
+      ),
     );
   }
 }
