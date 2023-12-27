@@ -1,5 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:restaurant_app/widgets/custom_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:restaurant_app/provider/scheduling_provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -10,6 +15,28 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final user = FirebaseAuth.instance.currentUser;
+  late bool isScheduled;
+  String prefsKey = '';
+
+  @override
+  void initState() {
+    super.initState();
+    prefsKey = '${user?.email}_scheduled';
+  }
+
+  Future<bool> _getScheduled() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(prefsKey) ?? false;
+  }
+
+  void _updateScheduled(value) async {
+    final prefs = await SharedPreferences.getInstance();
+    isScheduled = await _getScheduled();
+    setState(() {
+      isScheduled = value;
+    });
+    prefs.setBool(prefsKey, isScheduled);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +54,27 @@ class _ProfilePageState extends State<ProfilePage> {
               style: const TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 20),
+            FutureBuilder<bool>(
+                future: _getScheduled(),
+                builder: (context, snapshot) {
+                  return ListTile(
+                    title: const Text('Scheduling Recommendations'),
+                    trailing: Consumer<SchedulingProvider>(
+                        builder: (context, scheduled, _) {
+                      return Switch.adaptive(
+                        value: snapshot.data ?? false,
+                        onChanged: (value) async {
+                          _updateScheduled(value);
+                          if (Platform.isIOS) {
+                            customDialog(context);
+                          } else {
+                            scheduled.scheduledRecommendation(value);
+                          }
+                        },
+                      );
+                    }),
+                  );
+                }),
             ElevatedButton(
               onPressed: () {
                 FirebaseAuth.instance.signOut();

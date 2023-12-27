@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:restaurant_app/ui/list.dart';
-import 'package:restaurant_app/ui/favorite.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:restaurant_app/ui/detail.dart';
 import 'package:restaurant_app/ui/profile.dart';
+import 'package:restaurant_app/ui/favorite.dart';
+import 'package:restaurant_app/utils/notification_helper.dart';
+import 'package:restaurant_app/provider/scheduling_provider.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,11 +18,29 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int index = 0;
 
+  final NotificationHelper _notificationHelper = NotificationHelper();
+
   final screens = [
     const RestaurantListPage(),
     const RestaurantFavoritePage(),
-    const ProfilePage(),
+    ChangeNotifierProvider<SchedulingProvider>(
+      create: (_) => SchedulingProvider(),
+      child: const ProfilePage(),
+    ),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _notificationHelper
+        .configureSelectNotificationSubject(RestaurantDetailPage.routeName);
+  }
+
+  @override
+  void dispose() {
+    selectNotificationSubject.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

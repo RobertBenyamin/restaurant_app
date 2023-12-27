@@ -1,20 +1,26 @@
-import 'package:firebase_auth/firebase_auth.dart';
-
-import '../widgets/card_review.dart';
 import 'review.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:restaurant_app/widgets/card_review.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:restaurant_app/data/model/detail_restaurant.dart';
 import 'package:restaurant_app/provider/detail_provider.dart' as rdp;
 
 class RestaurantDetailPage extends StatelessWidget {
-  const RestaurantDetailPage({super.key});
+  const RestaurantDetailPage({super.key, this.restaurantDetail});
+
+  static const routeName = '/restaurant_detail';
+
+  final RestaurantDetail? restaurantDetail;
+
+  
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<rdp.RestaurantDetailProvider>(builder: (context, state, _) {
+    if (restaurantDetail == null) {
+      return Consumer<rdp.RestaurantDetailProvider>(builder: (context, state, _) {
       if (state.state == rdp.ResultState.loading) {
         return const Center(child: CircularProgressIndicator());
       } else if (state.state == rdp.ResultState.hasData) {
@@ -52,6 +58,9 @@ class RestaurantDetailPage extends StatelessWidget {
         );
       }
     });
+    } else {
+      return DetailPage(restaurant: restaurantDetail!.restaurant);
+    }
   }
 }
 
