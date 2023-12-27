@@ -5,8 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
 import 'package:restaurant_app/provider/list_provider.dart';
+import 'package:restaurant_app/ui/auth/auth.dart';
 import 'package:restaurant_app/ui/home.dart';
-import 'package:restaurant_app/ui/auth/login.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -51,7 +51,7 @@ class MainPage extends StatelessWidget {
               child: const HomePage(),
             );
           } else {
-            return const LoginPage();
+            return const AuthPage();
           }
         },
       ),

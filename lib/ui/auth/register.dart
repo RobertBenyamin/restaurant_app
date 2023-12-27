@@ -4,31 +4,44 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/auth_text_field.dart';
 
-class LoginPage extends StatefulWidget {
-  final VoidCallback showRegisterPage;
+class RegisterPage extends StatefulWidget {
+  final VoidCallback showLoginPage;
 
-  const LoginPage({super.key, required this.showRegisterPage});
+  const RegisterPage({super.key, required this.showLoginPage});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
+  late final TextEditingController _confirmPasswordController;
 
   @override
   void initState() {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
   }
 
-  Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
+  Future signUp() async {
+    if (_passwordController.text.trim() !=
+        _confirmPasswordController.text.trim()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Password and Confirm Password is not match!'),
+        ),
+      );
+      return;
+    }
+    await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
       email: _emailController.text.trim(),
       password: _passwordController.text.trim(),
-    ).catchError((error) {
+    )
+        .catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Email or password is invalid!'),
@@ -41,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -74,9 +88,14 @@ class _LoginPageState extends State<LoginPage> {
                     textController: _passwordController,
                     obscureText: true,
                     hintText: 'Password'),
+                const SizedBox(height: 12.0),
+                AuthTextField(
+                    textController: _confirmPasswordController,
+                    obscureText: true,
+                    hintText: 'Confirm Password'),
                 const SizedBox(height: 16.0),
                 ElevatedButton(
-                  onPressed: signIn,
+                  onPressed: signUp,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF37465D),
                     shape: RoundedRectangleBorder(
@@ -87,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                     minimumSize: const Size(double.infinity, 60.0),
                   ),
                   child: const Text(
-                    'Sign In',
+                    'Sign Up',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.white,
@@ -99,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      "Don't have an account yet? ",
+                      "Already have an account? ",
                       style: TextStyle(
                         color: Color(0xFF37465D),
                         fontSize: 12,
@@ -107,9 +126,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: widget.showRegisterPage,
+                      onTap: widget.showLoginPage,
                       child: const Text(
-                        "Register Now",
+                        "Login Now",
                         style: TextStyle(
                           color: Colors.blue,
                           fontSize: 12,
@@ -127,3 +146,4 @@ class _LoginPageState extends State<LoginPage> {
     ));
   }
 }
+
