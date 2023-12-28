@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:restaurant_app/data/api/api_services.dart';
 import 'package:restaurant_app/data/model/search_restaurant.dart';
 
@@ -27,7 +28,7 @@ class RestaurantSearchProvider extends ChangeNotifier {
     try {
       _state = ResultState.loading;
       notifyListeners();
-      final restaurantSearch = await apiService.getRestaurantSearch(query);
+      final restaurantSearch = await apiService.getRestaurantSearch(http.Client(), query);
       if (restaurantSearch.restaurants.isEmpty) {
         _state = ResultState.noData;
         notifyListeners();

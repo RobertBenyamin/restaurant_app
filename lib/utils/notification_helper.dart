@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:convert';
 import 'package:rxdart/subjects.dart';
+import 'package:http/http.dart' as http;
 import 'package:restaurant_app/common/navigation.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
 import 'package:restaurant_app/data/model/detail_restaurant.dart';
@@ -64,10 +65,10 @@ class NotificationHelper {
       iOS: iOSPlatformChannelSpecifics,
     );
 
-    var restaurantList = await ApiServices().getRestaurantList();
+    var restaurantList = await ApiServices().getRestaurantList(http.Client());
     var randomIndex = Random().nextInt(restaurantList.count);
     var restaurantDetail = await ApiServices()
-        .getRestaurantDetail(restaurantList.restaurants[randomIndex].id);
+        .getRestaurantDetail(http.Client(), restaurantList.restaurants[randomIndex].id);
     var restaurant = restaurantDetail.restaurant;
 
     var titleNotification = "<b>Restaurant For You!</b>";
