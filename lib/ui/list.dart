@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/ui/search.dart';
+import 'package:restaurant_app/widgets/error_page.dart';
 import 'package:restaurant_app/widgets/search_field.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
 import 'package:restaurant_app/data/model/restaurant.dart';
@@ -100,36 +101,12 @@ class _RestaurantListPageState extends State<RestaurantListPage> {
                       );
                     } else if (state.state ==
                         restaurant_list_provider.ResultState.noData) {
-                      return Center(
-                        child: Material(
-                          child: Text(
-                            state.message,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Color(0xFFFC726F),
-                            ),
-                          ),
-                        ),
-                      );
+                      return ErrorPage(message: state.message);
                     } else if (state.state ==
                         restaurant_list_provider.ResultState.error) {
-                      return Center(
-                        child: Material(
-                          child: Text(
-                            state.message,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Color(0xFFFC726F),
-                            ),
-                          ),
-                        ),
-                      );
+                      return ErrorPage(message: state.message);
                     } else {
-                      return const Center(
-                        child: Material(
-                          child: Text(''),
-                        ),
-                      );
+                      return const ErrorPage(message: 'Unknown error');
                     }
                   },
                 ),

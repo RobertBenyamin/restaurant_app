@@ -2,6 +2,7 @@ import 'review.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:restaurant_app/widgets/error_page.dart';
 import 'package:restaurant_app/widgets/card_review.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,35 +28,11 @@ class RestaurantDetailPage extends StatelessWidget {
         Restaurant restaurant = state.result.restaurant;
         return DetailPage(restaurant: restaurant);
       } else if (state.state == rdp.ResultState.noData) {
-        return Center(
-          child: Material(
-            child: Text(
-              state.message,
-              style: const TextStyle(
-                fontSize: 18,
-                color: Color(0xFFFC726F),
-              ),
-            ),
-          ),
-        );
+        return ErrorPage(message: state.message);
       } else if (state.state == rdp.ResultState.error) {
-        return Center(
-          child: Material(
-            child: Text(
-              state.message,
-              style: const TextStyle(
-                fontSize: 18,
-                color: Color(0xFFFC726F),
-              ),
-            ),
-          ),
-        );
+        return ErrorPage(message: state.message);
       } else {
-        return const Center(
-          child: Material(
-            child: Text(''),
-          ),
-        );
+        return const ErrorPage(message: 'Unknown error');
       }
     });
     } else {
