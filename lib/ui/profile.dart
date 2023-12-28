@@ -47,51 +47,99 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              'Email: ${user?.email}',
-              style: const TextStyle(fontSize: 20),
+            Container(
+              height: 150,
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              color: const Color(0xFF37465D),
+              child: Row(
+                children: [
+                  const SizedBox(width: 20),
+                  const CircleAvatar(
+                    radius: 50,
+                    child: Icon(
+                      Icons.person,
+                      size: 50,
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${user?.email}',
+                          style: const TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'ID: ${user?.uid}',
+                          style: const TextStyle(fontSize: 8, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                ]
+              ),
             ),
-            const SizedBox(height: 20),
-            FutureBuilder<bool>(
-                future: _getScheduled(),
-                builder: (context, snapshot) {
-                  return ListTile(
-                    title: const Text('Scheduling Recommendations'),
-                    trailing: Consumer<SchedulingProvider>(
-                        builder: (context, scheduled, _) {
-                      return Switch.adaptive(
-                        value: snapshot.data ?? false,
-                        onChanged: (value) async {
-                          _updateScheduled(value);
-                          if (Platform.isIOS) {
-                            customDialog(context);
-                          } else {
-                            scheduled.scheduledRecommendation(value);
-                          }
-                        },
-                      );
-                    }),
-                  );
-                }),
-            ElevatedButton(
-              onPressed: () {
+            const SizedBox(height: 8),
+            Container(
+              color: const Color(0xFF37465D),
+              child: FutureBuilder<bool>(
+                  future: _getScheduled(),
+                  builder: (context, snapshot) {
+                    return ListTile(
+                      title: const Text(
+                        'Scheduling Recommendations',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                      trailing: Consumer<SchedulingProvider>(
+                          builder: (context, scheduled, _) {
+                        return Switch.adaptive(
+                          value: snapshot.data ?? false,
+                          onChanged: (value) async {
+                            _updateScheduled(value);
+                            if (Platform.isIOS) {
+                              customDialog(context);
+                            } else {
+                              scheduled.scheduledRecommendation(value);
+                            }
+                          },
+                        );
+                      }),
+                    );
+                  }),
+            ),
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: () {
                 FirebaseAuth.instance.signOut();
               },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                backgroundColor: const Color(0xFFFC726F),
-                minimumSize: const Size(150, 50),
-              ),
-              child: const Text(
-                'Sign Out',
-                style: TextStyle(
-                  color: Color(0xFF37465D),
-                  fontSize: 24,
-                ),
+              child: Container(
+                color: const Color(0xFF37465D),
+                padding: const EdgeInsets.only(left: 16, right: 32, top: 16, bottom: 16),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Sign Out',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Icon(
+                      Icons.logout,
+                      color: Colors.white,
+                    ),
+                  ],
+                )
               ),
             ),
           ],
