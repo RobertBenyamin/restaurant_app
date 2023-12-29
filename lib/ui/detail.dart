@@ -23,7 +23,7 @@ class RestaurantDetailPage extends StatelessWidget {
     if (restaurantDetail == null) {
       return Consumer<rdp.RestaurantDetailProvider>(builder: (context, state, _) {
       if (state.state == rdp.ResultState.loading) {
-        return const Center(child: CircularProgressIndicator());
+        return const Scaffold(body: Center(child: CircularProgressIndicator()),);
       } else if (state.state == rdp.ResultState.hasData) {
         Restaurant restaurant = state.result.restaurant;
         return DetailPage(restaurant: restaurant);
