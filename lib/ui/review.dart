@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:restaurant_app/main.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
 
 class ReviewPage extends StatefulWidget {
@@ -21,13 +22,13 @@ class ReviewPage extends StatefulWidget {
 class _ReviewPageState extends State<ReviewPage> {
   String _message = '';
   bool isError = false;
-  late final TextEditingController _nameController;
+  bool _isAnonymous = false;
+  final user = FirebaseAuth.instance.currentUser;
   late final TextEditingController _reviewController;
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController();
     _reviewController = TextEditingController();
   }
 
@@ -41,15 +42,25 @@ class _ReviewPageState extends State<ReviewPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               children: <Widget>[
-                TextField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Name',
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Submit as Anonymous',
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                    Switch(
+                      value: _isAnonymous,
+                      onChanged: (value) {
+                        setState(() {
+                          _isAnonymous = value;
+                        });
+                      },
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 10.0),
                 TextField(
@@ -68,7 +79,7 @@ class _ReviewPageState extends State<ReviewPage> {
                       final url = Uri.parse('${ApiServices.baseUrl}review');
                       final body = json.encode({
                         'id': widget.id,
-                        'name': _nameController.text,
+                        'name': _isAnonymous ? 'Anonymous' : user?.email,
                         'review': _reviewController.text,
                       });
 
@@ -119,7 +130,6 @@ class _ReviewPageState extends State<ReviewPage> {
 
   @override
   void dispose() {
-    _nameController.dispose();
     _reviewController.dispose();
     super.dispose();
   }
