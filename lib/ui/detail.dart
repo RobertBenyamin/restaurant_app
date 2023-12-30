@@ -1,8 +1,7 @@
-import 'package:restaurant_app/main.dart';
-
 import 'review.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:restaurant_app/widgets/error_page.dart';
 import 'package:restaurant_app/utils/result_state.dart';
@@ -59,46 +58,12 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   bool showAllReviews = false;
-  // late bool isFavorite;
   final user = FirebaseAuth.instance.currentUser;
-  // String prefsKey = '';
 
   @override
   void initState() {
     super.initState();
-    // prefsKey = '${user?.email}_${widget.restaurant.id}';
   }
-
-  // Future<bool> _getFavorite() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   return prefs.getBool(prefsKey) ?? false;
-  // }
-
-  // void _updateFavorite() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   isFavorite = await _getFavorite();
-  //   setState(() {
-  //     isFavorite = !isFavorite;
-  //   });
-  //   prefs.setBool(prefsKey, isFavorite);
-  // }
-
-  // FutureBuilder<bool> iconFavorite() {
-  //   return FutureBuilder<bool>(
-  //     future: _getFavorite(),
-  //     builder: (context, snapshot) {
-  //       if (snapshot.hasData) {
-  //         isFavorite = snapshot.data!;
-  //         return Icon(
-  //           isFavorite ? Icons.favorite : Icons.favorite_border,
-  //           color: Colors.red,
-  //         );
-  //       } else {
-  //         return const CircularProgressIndicator();
-  //       }
-  //     },
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +80,7 @@ class _DetailPageState extends State<DetailPage> {
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => MainPage()),
+                    MaterialPageRoute(builder: (context) => const MainPage()),
                   );
                 },
               ),
@@ -126,12 +91,14 @@ class _DetailPageState extends State<DetailPage> {
                       ? IconButton(
                           icon: const Icon(Icons.favorite),
                           color: Colors.red,
-                          onPressed: () => provider.removeFavorite(widget.restaurant.id),
+                          onPressed: () =>
+                              provider.removeFavorite(widget.restaurant.id),
                         )
                       : IconButton(
                           icon: const Icon(Icons.favorite_border),
                           color: Colors.red,
-                          onPressed: () => provider.addFavorite(widget.restaurant),
+                          onPressed: () =>
+                              provider.addFavorite(widget.restaurant),
                         ),
                 ),
               ],
