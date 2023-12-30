@@ -299,7 +299,10 @@ class _DetailPageState extends State<DetailPage> {
                   MaterialPageRoute(
                     builder: (context) => ReviewPage(id: widget.restaurant.id),
                   ),
-                );
+                ).then((_) {
+                  Provider.of<rdp.RestaurantDetailProvider>(context, listen: false)
+                      .fetchDetailRestaurant();
+                });
               },
               child: const Icon(
                 Icons.rate_review,

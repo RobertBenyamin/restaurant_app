@@ -88,12 +88,7 @@ class _ReviewPageState extends State<ReviewPage> {
                           body: body);
 
                       if (response.statusCode == 201) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MainPage(),
-                          ),
-                        );
+                        Navigator.pop(context);
                       } else {
                         throw Exception(response.body);
                       }
