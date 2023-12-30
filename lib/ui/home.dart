@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/data/db/database_helper.dart';
+import 'package:restaurant_app/provider/database_provider.dart';
 import 'package:restaurant_app/ui/list.dart';
 import 'package:restaurant_app/ui/detail.dart';
 import 'package:restaurant_app/ui/profile.dart';
@@ -22,7 +24,11 @@ class _HomePageState extends State<HomePage> {
 
   final screens = [
     const RestaurantListPage(),
-    const RestaurantFavoritePage(),
+    
+    ChangeNotifierProvider(
+      create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
+      child: const RestaurantFavoritePage(),
+    ),
     ChangeNotifierProvider<SchedulingProvider>(
       create: (_) => SchedulingProvider(),
       child: const ProfilePage(),

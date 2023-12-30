@@ -44,6 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: const Text('Restaurant App'),
         backgroundColor: const Color(0xFFF5F2ED),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(

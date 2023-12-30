@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/data/db/database_helper.dart';
+import 'package:restaurant_app/provider/database_provider.dart';
 import 'package:restaurant_app/ui/detail.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
 import 'package:restaurant_app/data/model/restaurant.dart';
@@ -96,9 +98,17 @@ class CardRestaurant extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChangeNotifierProvider(
-              create: (_) => RestaurantDetailProvider(
-                  apiService: ApiServices(), id: restaurant.id),
+            builder: (context) => MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                  create: (_) => RestaurantDetailProvider(
+                      apiService: ApiServices(), id: restaurant.id),
+                ),
+                ChangeNotifierProvider(
+                  create: (_) =>
+                      DatabaseProvider(databaseHelper: DatabaseHelper()),
+                ),
+              ],
               child: const RestaurantDetailPage(),
             ),
           ),
