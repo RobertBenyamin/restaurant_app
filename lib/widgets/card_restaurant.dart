@@ -112,7 +112,9 @@ class CardRestaurant extends StatelessWidget {
               child: const RestaurantDetailPage(),
             ),
           ),
-        );
+        ).then((_) {
+          Provider.of<DatabaseProvider>(context, listen: false).getFavorites();
+        });
       },
     );
   }

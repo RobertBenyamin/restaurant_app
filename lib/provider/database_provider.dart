@@ -8,7 +8,7 @@ class DatabaseProvider extends ChangeNotifier {
   final DatabaseHelper databaseHelper;
 
   DatabaseProvider({required this.databaseHelper}) {
-    _getFavorites();
+    getFavorites();
   }
 
   late ResultState _state;
@@ -20,7 +20,7 @@ class DatabaseProvider extends ChangeNotifier {
   List<rs.Restaurant> _favorites = [];
   List<rs.Restaurant> get favorites => _favorites;
 
-  void _getFavorites() async {
+  void getFavorites() async {
     _state = ResultState.loading;
     notifyListeners();
     _favorites = await databaseHelper.getFavorites();
@@ -36,7 +36,7 @@ class DatabaseProvider extends ChangeNotifier {
   void addFavorite(rd.Restaurant restaurant) async {
     try {
       await databaseHelper.insertFavorite(restaurant);
-      _getFavorites();
+      getFavorites();
     } catch (e) {
       _state = ResultState.error;
       _message = 'Failed to add favorite';
@@ -52,7 +52,7 @@ class DatabaseProvider extends ChangeNotifier {
   void removeFavorite(String id) async {
     try {
       await databaseHelper.removeFavorite(id);
-      _getFavorites();
+      getFavorites();
     } catch (e) {
       _state = ResultState.error;
       _message = 'Failed to remove favorite';
