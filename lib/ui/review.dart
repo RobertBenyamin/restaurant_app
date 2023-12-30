@@ -4,7 +4,6 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:restaurant_app/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
 
