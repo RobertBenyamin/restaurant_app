@@ -10,10 +10,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:restaurant_app/ui/auth/auth.dart';
 import 'package:restaurant_app/common/navigation.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:restaurant_app/provider/list_provider.dart';
+import 'package:restaurant_app/data/db/database_helper.dart';
 import 'package:restaurant_app/utils/background_service.dart';
 import 'package:restaurant_app/utils/notification_helper.dart';
+import 'package:restaurant_app/provider/database_provider.dart';
+import 'package:restaurant_app/provider/scheduling_provider.dart';
 import 'package:restaurant_app/data/model/detail_restaurant.dart';
+import 'package:restaurant_app/provider/preferences_provider.dart';
+import 'package:restaurant_app/data/preferences/preferences_helper.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -45,24 +51,35 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Restaurant App',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF37465D)),
-        useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFFF5F2ED),
-        fontFamily: GoogleFonts.inknutAntiqua().fontFamily,
-      ),
-      navigatorKey: navigatorKey,
-      home: const MainPage(),
-      routes: {
-        RestaurantDetailPage.routeName: (context) => RestaurantDetailPage(
-              restaurantDetail: ModalRoute.of(context)?.settings.arguments
-                  as RestaurantDetail,
-            ),
-      },
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => RestaurantListProvider(apiService: ApiServices()),
+          ),
+          ChangeNotifierProvider(create: (_) => SchedulingProvider()),
+          ChangeNotifierProvider(
+            create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
+          ),
+        ],
+        child: MaterialApp(
+          title: 'Restaurant App',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme:
+                ColorScheme.fromSeed(seedColor: const Color(0xFF37465D)),
+            useMaterial3: true,
+            scaffoldBackgroundColor: const Color(0xFFF5F2ED),
+            fontFamily: GoogleFonts.inknutAntiqua().fontFamily,
+          ),
+          navigatorKey: navigatorKey,
+          home: const MainPage(),
+          routes: {
+            RestaurantDetailPage.routeName: (context) => RestaurantDetailPage(
+                  restaurantDetail: ModalRoute.of(context)?.settings.arguments
+                      as RestaurantDetail,
+                ),
+          },
+        ));
   }
 }
 
@@ -77,7 +94,12 @@ class MainPage extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ChangeNotifierProvider(
-              create: (_) => RestaurantListProvider(apiService: ApiServices()),
+              create: (_) => PreferencesProvider(
+                preferencesHelper: PreferencesHelper(
+                  sharedPreferences: SharedPreferences.getInstance(),
+                  id: FirebaseAuth.instance.currentUser!.uid,
+                ),
+              ),
               child: const HomePage(),
             );
           } else {
