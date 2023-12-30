@@ -1,7 +1,6 @@
 import 'review.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant_app/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:restaurant_app/widgets/error_page.dart';
 import 'package:restaurant_app/utils/result_state.dart';
@@ -76,14 +75,6 @@ class _DetailPageState extends State<DetailPage> {
             appBar: AppBar(
               title: const Text('Restaurant App'),
               backgroundColor: const Color(0xFFF5F2ED),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const MainPage()),
-                  );
-                },
-              ),
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 12.0),
