@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/utils/result_state.dart';
+import 'package:restaurant_app/widgets/error_page.dart';
 import 'package:restaurant_app/data/model/restaurant.dart';
 import 'package:restaurant_app/widgets/card_restaurant.dart';
-import 'package:restaurant_app/provider/restaurant_search_provider.dart';
+import 'package:restaurant_app/provider/search_provider.dart';
 
 class RestaurantSearchPage extends StatelessWidget {
   const RestaurantSearchPage({Key? key}) : super(key: key);
@@ -29,35 +31,11 @@ class RestaurantSearchPage extends StatelessWidget {
                 },
               );
             } else if (state.state == ResultState.noData) {
-              return Center(
-                child: Material(
-                  child: Text(
-                    state.message,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Color(0xFFFC726F),
-                    ),
-                  ),
-                ),
-              );
+              return ErrorPage(message: state.message);
             } else if (state.state == ResultState.error) {
-              return Center(
-                child: Material(
-                  child: Text(
-                    state.message,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Color(0xFFFC726F),
-                    ),
-                  ),
-                ),
-              );
+              return ErrorPage(message: state.message);
             } else {
-              return const Center(
-                child: Material(
-                  child: Text(''),
-                ),
-              );
+              return const ErrorPage(message: 'Unknown error');
             }
           },
         ),

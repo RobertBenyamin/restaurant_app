@@ -3,11 +3,9 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:restaurant_app/ui/restaurant_list.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
-import 'package:restaurant_app/provider/restaurant_list_provider.dart';
 
 class ReviewPage extends StatefulWidget {
   final String id;
@@ -23,8 +21,15 @@ class ReviewPage extends StatefulWidget {
 class _ReviewPageState extends State<ReviewPage> {
   String _message = '';
   bool isError = false;
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _reviewController = TextEditingController();
+  bool _isAnonymous = false;
+  final user = FirebaseAuth.instance.currentUser;
+  late final TextEditingController _reviewController;
+
+  @override
+  void initState() {
+    super.initState();
+    _reviewController = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +41,25 @@ class _ReviewPageState extends State<ReviewPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               children: <Widget>[
-                TextField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Name',
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Submit as Anonymous',
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                    Switch(
+                      value: _isAnonymous,
+                      onChanged: (value) {
+                        setState(() {
+                          _isAnonymous = value;
+                        });
+                      },
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 10.0),
                 TextField(
@@ -63,7 +78,7 @@ class _ReviewPageState extends State<ReviewPage> {
                       final url = Uri.parse('${ApiServices.baseUrl}review');
                       final body = json.encode({
                         'id': widget.id,
-                        'name': _nameController.text,
+                        'name': _isAnonymous ? 'Anonymous' : user?.email,
                         'review': _reviewController.text,
                       });
 
@@ -72,18 +87,7 @@ class _ReviewPageState extends State<ReviewPage> {
                           body: body);
 
                       if (response.statusCode == 201) {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                ChangeNotifierProvider(
-                              create: (_) => RestaurantListProvider(
-                                  apiService: ApiServices()),
-                              child: const RestaurantListPage(),
-                            ),
-                          ),
-                          (route) => false,
-                        );
+                        Navigator.pop(context);
                       } else {
                         throw Exception(response.body);
                       }
@@ -116,5 +120,11 @@ class _ReviewPageState extends State<ReviewPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _reviewController.dispose();
+    super.dispose();
   }
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant_app/ui/restaurant_detail.dart';
+import 'package:restaurant_app/data/db/database_helper.dart';
+import 'package:restaurant_app/provider/database_provider.dart';
+import 'package:restaurant_app/ui/detail.dart';
 import 'package:restaurant_app/data/api/api_services.dart';
 import 'package:restaurant_app/data/model/restaurant.dart';
-import 'package:restaurant_app/provider/restaurant_detail_provider.dart';
+import 'package:restaurant_app/provider/detail_provider.dart';
 
 class CardRestaurant extends StatelessWidget {
   const CardRestaurant({
@@ -79,7 +81,7 @@ class CardRestaurant extends StatelessWidget {
                       children: [
                         const Icon(
                           Icons.star_border_outlined,
-                          color: Colors.yellow,
+                          color: Colors.orange,
                         ),
                         const SizedBox(width: 8),
                         Text(restaurant.rating.toString()),
@@ -96,13 +98,23 @@ class CardRestaurant extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChangeNotifierProvider(
-              create: (_) => RestaurantDetailProvider(
-                  apiService: ApiServices(), id: restaurant.id),
+            builder: (context) => MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                  create: (_) => RestaurantDetailProvider(
+                      apiService: ApiServices(), id: restaurant.id),
+                ),
+                ChangeNotifierProvider(
+                  create: (_) =>
+                      DatabaseProvider(databaseHelper: DatabaseHelper()),
+                ),
+              ],
               child: const RestaurantDetailPage(),
             ),
           ),
-        );
+        ).then((_) {
+          Provider.of<DatabaseProvider>(context, listen: false).getFavorites();
+        });
       },
     );
   }
