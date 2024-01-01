@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:restaurant_app/utils/result_state.dart';
 import 'package:restaurant_app/widgets/error_page.dart';
-import 'package:restaurant_app/provider/list_provider.dart';
 import 'package:restaurant_app/widgets/card_restaurant.dart';
 import 'package:restaurant_app/provider/database_provider.dart';
 
@@ -33,21 +32,7 @@ class _RestaurantFavoritePageState extends State<RestaurantFavoritePage> {
                 20.0 -
                 kToolbarHeight -
                 MediaQuery.of(context).padding.top,
-            child: Consumer<RestaurantListProvider>(
-              builder: (context, state, _) {
-                if (state.state == ResultState.loading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state.state == ResultState.hasData) {
-                  return _buildList();
-                } else if (state.state == ResultState.noData) {
-                  return ErrorPage(message: state.message);
-                } else if (state.state == ResultState.error) {
-                  return ErrorPage(message: state.message);
-                } else {
-                  return const ErrorPage(message: 'Unknown error');
-                }
-              },
-            ),
+            child: _buildList(),
           ),
         ),
       ),
